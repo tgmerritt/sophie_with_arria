@@ -7,6 +7,8 @@
     <%= stylesheet_link_tag 'application', media: 'all' %>
     
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <!-- Comment out the next line once we can load uneeq-js via yarn and webpacker -->
+    <script src="//unpkg.com/uneeq-js/dist/umd"></script>
     <%= csrf_meta_tags %>
   </head>
   <body style="margin:0">
