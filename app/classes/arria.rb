@@ -4,6 +4,9 @@ class Arria
     require 'json'
   
     MORNINGSTAR_ENDPOINT="https://app.studio.arria.com:443/alite_content_generation_webapp/text/zQllOBR5YYn"
+    AUSTRALIAN_ENDPOINT="https://app.studio.arria.com:443/alite_content_generation_webapp/text/ZXLYorgz9do"
+    EXPENSE_ENDPOINT="https://app.studio.arria.com:443/alite_content_generation_webapp/text/egnKRMyvYx8"
+    BUSINESS_ENDPOINT="https://app.studio.arria.com:443/alite_content_generation_webapp/text/kMd7rDZeZ5x"
     
   
     attr_accessor :arria_request_info, :location
@@ -18,6 +21,30 @@ class Arria
       when "show morningstar data"
         begin
           response = query(query, MORNINGSTAR_ENDPOINT, Rails.application.credentials.morningstar_api_key)
+          text = ActionView::Base.full_sanitizer.sanitize(response[0]["result"])
+          create_json_to_send(text)
+        rescue StandardError => e
+          puts e
+        end
+      when "show australian data"
+        begin
+          response = query(query, AUSTRALIAN_ENDPOINT, Rails.application.credentials.australian_api_key)
+          text = ActionView::Base.full_sanitizer.sanitize(response[0]["result"])
+          create_json_to_send(text)
+        rescue StandardError => e
+          puts e
+        end
+      when "show expense data"
+        begin
+          response = query(query, EXPENSE_ENDPOINT, Rails.application.credentials.expense_api_key)
+          text = ActionView::Base.full_sanitizer.sanitize(response[0]["result"])
+          create_json_to_send(text)
+        rescue StandardError => e
+          puts e
+        end
+      when "show business data"
+        begin
+          response = query(query, BUSINESS_ENDPOINT, Rails.application.credentials.business_api_key)
           text = ActionView::Base.full_sanitizer.sanitize(response[0]["result"])
           create_json_to_send(text)
         rescue StandardError => e
