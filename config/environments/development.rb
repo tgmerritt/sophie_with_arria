@@ -59,4 +59,11 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+
+  # Clear the Host Authorization middleware of all blocking and allow all requests through in development
+  # Using NGROK to create a tunnel from UneeQ to my laptop, the NGROK address changes each time I start the service
+  # instead of whitelisting each address, just disable this feature of Rails 6 in dev.  Remember to allow specific hosts
+  # in production if this is required
+  config.hosts.clear
 end

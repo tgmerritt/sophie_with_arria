@@ -10,7 +10,7 @@ window.onload = function () {
 
     const uneeq = new Uneeq({
         url: 'https://dal-admin.faceme.com',
-        conversationId: '618ac47d-7e60-413e-9381-0e4671e6f572', // This conversation ID is for local debugging only
+        conversationId: '38210c93-9605-4e3f-9ea6-00bddd27e973', // This conversation ID is for local debugging only
         avatarVideoContainerElement: document.getElementById('avatar-container'),
         localVideoContainerElement: document.getElementById('local-container'),
         customData: {},
