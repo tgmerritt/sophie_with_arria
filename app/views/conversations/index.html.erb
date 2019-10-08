@@ -1,3 +1,4 @@
+<%= javascript_pack_tag "conversations" %>
 <div id="msg" data-user-token="<%= @token %>" data-api-key="<%= @api_key %>"></div>
 <div id="avatar-container"></div>
 <div id="transcript"></div>
@@ -24,4 +25,69 @@
     <button onclick="hideSettings()">Done</button>
 </div>
 <div id="injectHTML"></div>
+
+<script>
+function setHarkerState(enabled) {
+        // I really hate that hoisting is a thing - and I'm not going to bother figuring out all the hoisting and non-hoisting going on with this function below
+        // The code is not DRY at all because the pressingDown and notPressingDown functions defined inside window.load do what the below does, but because of hoisting and scope I can't access them
+        // And I just can't be bothered to put time into figuring out why right now...
+
+        if (enabled) {
+            var stream = uneeq.deviceManager.mediaHandler.localStream$._value
+            var options = {};
+            window.speechEvents = hark(stream, options);
+            console.log("Enabling Harker");
+            window.speechEvents.on('speaking', function () {
+                console.log("Registering Harker Speech Event: speaking");
+                document.getElementById('prompt').removeAttribute('class', 'prompt');
+                document.getElementById('prompt').innerHTML = "Listening...";
+                document.getElementById('prompt').setAttribute('class', 'prompt-active');
+                uneeq.startRecording();
+            });
+            window.speechEvents.on('stopped_speaking', function () {
+                console.log("Registering Harker Speech Event: stopped speaking");
+                document.getElementById('prompt').removeAttribute('class', 'prompt-active');
+                document.getElementById('prompt').innerHTML = "Hold <b>space</b> to speak.";
+                document.getElementById('prompt').setAttribute('class', 'prompt');
+                uneeq.stopRecording();
+            });
+            document.getElementById('harker-btn').style.display = 'none';
+            document.getElementById('disable-harker-btn').style.display = 'block';
+        } else {
+            console.log("Disabling Harker");
+            window.speechEvents.stop();
+            document.getElementById('harker-btn').style.display = 'block';
+            document.getElementById('disable-harker-btn').style.display = 'none';
+        }
+    }
+
+    function askKeyPress(e) {
+        if (e.key === 'Enter' && uneeq.ready.value === true) {
+            console.log("Sending transcript to FaceMe: " + document.getElementById('askInput').value);
+            uneeq.sendTranscript(document.getElementById('askInput').value);
+            document.getElementById('askInput').value = '';
+        }
+    }
+
+    function showSettings() {
+        document.getElementById('settings').classList.add('show');
+        updateDeviceList();
+    }
+
+    function hideSettings() {
+        document.getElementById('settings').classList.remove('show');
+    }
+
+    function setPauseState(paused) {
+        if (paused) {
+            uneeq.pauseSession();
+            document.getElementById('pause-btn').style.display = 'none';
+            document.getElementById('resume-btn').style.display = 'block';
+        } else {
+            uneeq.resumeSession();
+            document.getElementById('pause-btn').style.display = 'block';
+            document.getElementById('resume-btn').style.display = 'none';
+        }
+    }
+    </script>
 

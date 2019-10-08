@@ -25,7 +25,7 @@ function createLinkOnPage(latitude, longitude) {
             document.getElementById('lds-roller').remove();
             clearInterval();
         }
-    }, 100);
+    }, 3000);
 }
 
 getLocation();
